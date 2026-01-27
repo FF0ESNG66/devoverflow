@@ -29,10 +29,11 @@ const LocalSearch = ( {route, imgSrc, placeholder, otherClasses}: Props) => {
         if (previousSearchRef.current === searchQuery) return;
 
         previousSearchRef.current = searchQuery;
-        
+
         const delayDebounceFn = setTimeout(() => {  // using debouncing, limit how often a function is executed
 
             if(searchQuery) {
+                console.log(`This is searchParams ${searchParams}`)
                 const newUrl = formUrlQuery({
                     params: searchParams.toString(),
                     key: "query",
@@ -56,7 +57,7 @@ const LocalSearch = ( {route, imgSrc, placeholder, otherClasses}: Props) => {
         
         return () => clearTimeout(delayDebounceFn) // whenever using "timeout" in a useEffect, put this at the end and return callback function clearTimeout
 
-    }, [searchQuery, router, route, searchParams, pathname] ) // whenever any of these functionalities change, we want to be able to recall the use effect
+    }, [searchQuery, searchParams, router, route, pathname] ) // whenever any of these functionalities change, we want to be able to recall the use effect
 
   return (
     <div className={`background-light800_darkgradient flex min-h-14 grow items-center gap-4 rounded-[10px] px-4 ${otherClasses} `} >
