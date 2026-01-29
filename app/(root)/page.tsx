@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import Link from "next/link";
 import LocalSearch from "@/components/search/LocalSearch";
+import HomeFilter from "@/components/filters/HomeFilter"
+import QuestionCard from "@/components/cards/QuestionCard";
 
 
 interface SearchParams {
@@ -13,20 +15,53 @@ const questions = [
     _id: "1",
     title: "How to learn React?",
     description: "I want to learn React, help",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      imgUrl: "https://static.wikia.nocookie.net/doomspire-defense/images/3/33/John_Doe.png/revision/latest?cb=20241031204507",
+    },
+    upvotes: 15,
+    answers: 88,
+    views: 123378,
+    createdAt: new Date(),
   },
   {
     _id: "2",
     title: "How to learn Next?",
     description: "I want to learn Next, help",
+    tags: [
+      { _id: "1", name: "Next" },
+      { _id: "2", name: "Fullstack" },
+    ],
+    author: {
+      _id: "2",
+      name: "John Wayne",
+      imgUrl: "https://cdn.britannica.com/82/136182-050-6BB308B7/John-Wayne.jpg?w=400&h=300&c=crop",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date(),
   }
 ]
 
 const Home = async ( {searchParams}: SearchParams ) => {
-  const {query = ""} =  await searchParams;  // by setting a default value as empty string, we will see all the questions instead of nothing
+  const {query = "", filter = ""} =  await searchParams;  // by setting a default value as empty string, we will see all the questions instead of nothing
 
-  const filteredQuestions = questions.filter((question) => 
-    question.title.toLowerCase().includes(query?.toLowerCase())
-  )
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+    const matchesFilter = filter
+      ? question.tags[0].name?.toLowerCase() === filter.
+      toLowerCase()
+      : true
+    return matchesQuery && matchesFilter;
+  })
 
 
   return (
@@ -49,11 +84,11 @@ const Home = async ( {searchParams}: SearchParams ) => {
             otherClasses="flex-1"
           />
         </section>
-        {/* HomeFilter Component */}
+        <HomeFilter />
 
         <div className="mt-10 flex w-full flex-col gap-6">
           {filteredQuestions.map((question) => (
-            <h1 key={question._id}>{question.title}</h1>
+            <QuestionCard key={question._id} question={question} />
           ))}
         </div>
     </>

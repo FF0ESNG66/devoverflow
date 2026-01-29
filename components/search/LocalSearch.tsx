@@ -22,6 +22,7 @@ const LocalSearch = ( {route, imgSrc, placeholder, otherClasses}: Props) => {
     const pathname = usePathname()
 
     const [searchQuery, setSearchQuery] = useState(query)
+
     const previousSearchRef = useRef(searchQuery);
 
     useEffect( () => {
@@ -33,9 +34,8 @@ const LocalSearch = ( {route, imgSrc, placeholder, otherClasses}: Props) => {
         const delayDebounceFn = setTimeout(() => {  // using debouncing, limit how often a function is executed
 
             if(searchQuery) {
-                console.log(`This is searchParams ${searchParams}`)
                 const newUrl = formUrlQuery({
-                    params: searchParams.toString(),
+                    params: searchParams.toString(),  // query=[value]
                     key: "query",
                     value: searchQuery,
                 })
