@@ -20,9 +20,9 @@ const Metric = ( {
             <Image 
                 src={imgUrl}
                 alt={alt}
-                width={16}
-                height={16}
-                className={`rounded-full object-cover ${imgStyle}`}
+                width={0}
+                height={0}
+                className={`rounded-full object-cover w-4 h-4 ${imgStyle}`}
             />
             <p className={`${textStyles} flex items-center gap-1`}>
                 {value}

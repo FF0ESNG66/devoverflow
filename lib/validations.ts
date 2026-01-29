@@ -49,13 +49,20 @@ export const SignUpSchema = z.object({
 });
 
 export const AskQuestionSchema = z.object({
+
   title: z
     .string()
     .min(5, {
       message: 'Title must be at least 5 characters.',
     })
     .max(130, { message: "Title musn't be longer then 130 characters." }),
-  content: z.string().min(100, { message: 'Minimum of 100 characters.' }),
+
+  content: z
+    .string()
+    .min(100, { 
+      message: 'Minimum of 100 characters.' 
+    }),
+
   tags: z
     .array(
       z
