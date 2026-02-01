@@ -15,7 +15,7 @@ export interface IUser {
 }
 
 // Defining model's SCHEMA like django
-const UserSchema = new Schema({
+const UserSchema = new Schema<IUser>({
     name: { type: String, required: true },
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -28,7 +28,7 @@ const UserSchema = new Schema({
 )
 
 // Now that we have the schema, we define the MODEL
-const User = models?.user || model<IUser>("User", UserSchema);
+const User = models?.User || model<IUser>("User", UserSchema);
 
 
 // Note
