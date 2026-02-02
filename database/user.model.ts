@@ -1,4 +1,4 @@
-import { model, models, Schema } from "mongoose";
+import { model, models, Schema, Document } from "mongoose";
 
 
 // stands for "interface User", to differentiate it from User which is the model
@@ -8,11 +8,15 @@ export interface IUser {
     username: string;
     email: string;
     bio?: string;
-    image: string;
+    image?: string;
     location?: string;
     portfolio?: string;
     reputation?: number;
 }
+
+// Creating an intersection interface/type so we can access fields like _id or id or any virtual methods provided by Mongoose on any kind of model.
+// henever we need to access any default Mongoose-specific fields, we’ll use this interface to define types for that result and make it typesafe.
+export interface IUserDoc extends IUser, Document {}
 
 // Defining model's SCHEMA like django
 const UserSchema = new Schema<IUser>({
@@ -20,7 +24,7 @@ const UserSchema = new Schema<IUser>({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     bio: { type: String },
-    image: { type: String, required: true},
+    image: { type: String},
     location: { type: String },
     portfolio: { type: String },
     reputation: { type: Number, default: 0 },
