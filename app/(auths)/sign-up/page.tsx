@@ -1,4 +1,4 @@
-"use cleint";
+"use client";
 
 import AuthForm from "@/components/forms/AuthForm"
 import { SignUpSchema } from "@/lib/validations"

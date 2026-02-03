@@ -23,7 +23,7 @@ declare global {
 let cached = global.mongoose;
 
 if(!cached) {
-    // We're doing this becaise Next.jsw functions can be invoked multiple times, especially in development.
+    // We're doing this becaise Next.js functions can be invoked multiple times, especially in development.
     // So without caching, each invocation create a new database connection, leading to resource exhaustion and potential
     // connection limits being reached
     cached = global.mongoose = { conn: null, promise: null };
