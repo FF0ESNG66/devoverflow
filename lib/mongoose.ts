@@ -1,4 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
+import logger from "./logger";
 
 
 // Define MongoDB URI
@@ -32,6 +33,7 @@ if(!cached) {
 // Establishing the connnection
 const dbConnect = async (): Promise<Mongoose> => {   // Is going to return a Promise, so we define that type
     if(cached.conn) {
+        logger.info("Using existing mongoose connection");
         return cached.conn; //Check if there's a cached connection and if so, return that one
     }
 
@@ -41,11 +43,11 @@ const dbConnect = async (): Promise<Mongoose> => {   // Is going to return a Pro
             dbName: "DevflowCluster",
         })
         .then((result) => {
-            console.log("Conected to MongoDB");
+            logger.info("Conected to MongoDB");
             return result;
 
         }).catch((error) => {
-            console.error("Error connecting to MongoDB", error);
+            logger.error("Error connecting to MongoDB", error);
             throw error;
         });
     }
