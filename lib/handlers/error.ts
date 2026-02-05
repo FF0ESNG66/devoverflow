@@ -46,10 +46,10 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
         );
 
         return formatResponse(
-        responseType,
-        validationError.statusCode,
-        validationError.message,
-        validationError.errors
+            responseType,
+            validationError.statusCode,
+            validationError.message,
+            validationError.errors
         );
     }
 

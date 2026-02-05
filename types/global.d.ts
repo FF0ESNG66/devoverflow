@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 interface Tag {
     _id: string;
     name: string;
@@ -18,4 +20,38 @@ interface Question {
     upvotes: number;
     answers: number;
     views: number;
+}
+
+// With this we can know exactly how each one of our responses is goint to look like
+type ActionResponse<T = null> = {
+    success: boolean;
+    data?: T;
+    error: {
+        message: string;
+        details?: Record<string, string[]>
+    },
+    status?: number;
+}
+
+type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+type ErrorResponse = ActionResponse<undefined> & { success: false };
+
+type APIErrorResponse = NextResponse<ErrorResponse>;
+type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>;
+
+
+type SuccessCall = {
+    success: boolean;
+    data?: Record<string, string>,
+    error: null,
+    status?: number;
+}
+
+type ErrorCall = {
+    success: boolean;
+    error: {
+        message: string;
+        details?: Record<string, string[]>
+    },
+    status?: number;
 }
