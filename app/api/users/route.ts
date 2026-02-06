@@ -1,9 +1,9 @@
-import User from "@/database/user.model";
+import User, { IUser } from "@/database/user.model";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
-import { APIErrorResponse } from "@/types/global";
+import { APIErrorResponse, APIResponse } from "@/types/global";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
@@ -23,7 +23,7 @@ export async function GET() {
 
 
 // Create User
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<APIResponse<IUser>> {
     try {
         await dbConnect();
 

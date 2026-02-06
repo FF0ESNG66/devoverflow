@@ -26,32 +26,19 @@ interface Question {
 type ActionResponse<T = null> = {
     success: boolean;
     data?: T;
-    error: {
+    error?: {
         message: string;
-        details?: Record<string, string[]>
+        details?: Record<string, string[]>  // This is common for form validations
     },
     status?: number;
 }
 
+// Everything from ActionResponse<T> PLUS a constraint in success
 type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
 type ErrorResponse = ActionResponse<undefined> & { success: false };
 
+// Wrapping types in NextResponse. One if for guaranteed failed responses
+// such as catch in trycatch blocks and the other ones for responses that may success or not (such as the try in trycatch blocks)
 type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>;
 
-
-type SuccessCall = {
-    success: boolean;
-    data?: Record<string, string>,
-    error: null,
-    status?: number;
-}
-
-type ErrorCall = {
-    success: boolean;
-    error: {
-        message: string;
-        details?: Record<string, string[]>
-    },
-    status?: number;
-}
