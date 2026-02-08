@@ -22,6 +22,17 @@ interface Question {
     views: number;
 }
 
+interface SignInWithOAuthParams {
+    user: {
+        email: string,
+        name: string,
+        image: string,
+        username: string,
+    };
+    provider: "github" | "google";
+    providerAccountId: string
+}
+
 // With this we can know exactly how each one of our responses is goint to look like
 type ActionResponse<T = null> = {
     success: boolean;
