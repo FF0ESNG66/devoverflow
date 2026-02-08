@@ -30,31 +30,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 };
 
 
-// DELETE /api/users/[id]
-export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }>}) {
-    const { id } = await params;
 
-    if(!id) throw new NotFoundError("Account");
-
-    try {
-        await dbConnect();
-
-        const account = await Account.findByIdAndDelete(id);
-
-        if(!account) throw new NotFoundError("Account");
-
-        // We're returning the data of the deleted user for scenarios where we want display "User SNG66 was deleted"
-        return NextResponse.json({ success: true, data: account }, { status: 204 });
-
-    } catch (error) {
-        return handleError(error, "api") as APIErrorResponse;
-    }
-
-    
-}
-
-
-// PUT /api/users/[id]
+// PUT /api/accounts/[id]
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }>}) {
     const { id } = await params;
 
@@ -83,4 +60,28 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     } catch (error) {
         return handleError(error, "api") as APIErrorResponse;
     }
+}
+
+
+// DELETE /api/accounts/[id]
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }>}) {
+    const { id } = await params;
+
+    if(!id) throw new NotFoundError("Account");
+
+    try {
+        await dbConnect();
+
+        const account = await Account.findByIdAndDelete(id);
+
+        if(!account) throw new NotFoundError("Account");
+
+        // We're returning the data of the deleted user for scenarios where we want display "User SNG66 was deleted"
+        return NextResponse.json({ success: true, data: account }, { status: 204 });
+
+    } catch (error) {
+        return handleError(error, "api") as APIErrorResponse;
+    }
+
+    
 }
