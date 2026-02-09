@@ -8,6 +8,7 @@ import { IAccountDoc } from "./database/account.model";
 // These callbacks will make sure that our users are authenticated
 // They will be called whenever a user signs in using any provider.
  
+// with the callbacks we can intercept and customize the auth flow
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub, Google],
   callbacks: {
@@ -16,7 +17,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async jwt({ token, account}) {
+      // account exists only during sign-in.
       if(account) {
+        // destructuring with rename, taking the data property and store it in a variable called existingAccount 
         const { data: existingAccount, success } = (await api.accounts.getByProvider(
           account.type === "credentials" 
           ? token.email! 
@@ -32,9 +35,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return token; // modified token that includes user's id
     },
+    // This runs right after OAuth succeeds, but before the user is considered logged in.
+    // OAuth succeeded → “Do we accept this user in our system?”
     async signIn({ user, profile, account}) {
       if(account?.type === "credentials") return true;
-      if(!account || !user) return false;
+      if(!account || !user) return false; // Safety check
 
       const userInfo = {
         name: user.name!,
@@ -42,8 +47,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         image: user.image!,
         username: 
         account.provider === "github" 
-          ? (profile?.login as string) 
-          : (user.name?.toLowerCase() as string)
+          ? (profile?.login as string) // github
+          : (user.name?.toLowerCase() as string) // google
       };
 
       const { success } = await api.auth.oAuthSignIn({ 

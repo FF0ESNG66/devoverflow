@@ -8,20 +8,24 @@ import z from "zod";
 import slugify from "slugify";
 import User from "@/database/user.model";
 import Account from "@/database/account.model";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+    console.log("HERE WE ARE")
     const { provider, providerAccountId, user } = await request.json();
 
     await dbConnect();
 
     // creating a new mongoose session
     const session = await mongoose.startSession();
+    
     session.startTransaction();
 
     try {
         const validatedData = SignInWithOAuthSchema.safeParse({ provider, providerAccountId, user})
 
         if(!validatedData.success) {
+            console.log("FAILED")
             const flattered = z.flattenError(validatedData.error);
             throw new ValidationError(flattered.fieldErrors)
         }
@@ -35,8 +39,8 @@ export async function POST(request: Request) {
         });
 
         // User creation process starts here
-
-        let existingUser = await User.findOne({ slugifyUsername }).session(session);  //This last part is to cancel the whole transaction if this fails
+        console.log("HERE WE ARE 2")
+        let existingUser = await User.findOne({ email }).session(session);  //This last part is to cancel the whole transaction if this fails
 
         if(!existingUser) {
             // This is an array because we're passing an array to the create() method 
@@ -55,8 +59,8 @@ export async function POST(request: Request) {
             if(existingUser.image !== image) updatedData.image = image;
             
             if(Object.keys(updatedData).length > 0) {  // if there are changes in the initialized object
-                await User.updateOne({ 
-                    _id: existingUser._id }, // Field used to find the user
+                await User.updateOne( 
+                    {_id: existingUser._id }, // Field used to find the user
                     { $set: updatedData }  // Data used to update the user
                 ).session(session) // making this part of the mongoose transaction
             }
@@ -72,11 +76,13 @@ export async function POST(request: Request) {
 
         if(!existingAccount) {
             await Account.create([
-                { userid: existingUser._id, name, image, provider, providerAccountId }
+                { user: existingUser._id, name, image, provider, providerAccountId }
             ], { session })
         };
 
         await session.commitTransaction();
+
+        return NextResponse.json({ success:true });
 
     } catch (error: unknown) {
         await session.abortTransaction(); //rolback all the changes if something fails

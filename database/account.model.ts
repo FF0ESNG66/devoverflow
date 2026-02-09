@@ -10,8 +10,8 @@ export interface IAccount {
     name: string;
     image?: string;
     password?: string;
-    authMethod: string;
-    providerId: string
+    provider: string;
+    providerAccountId: string
 };
 
 
@@ -22,8 +22,8 @@ const AccountSchema = new Schema<IAccount>({
     name: { type: String, required: true },
     image: { type: String },
     password: { type: String },
-    authMethod: { type: String, required: true },
-    providerId: { type: String, required: true },
+    provider: { type: String, required: true },
+    providerAccountId: { type: String, required: true },
     }, { timestamps: true }
 );
 

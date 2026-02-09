@@ -3,7 +3,8 @@ import { fetchHandler } from "./handlers/fetch";
 import { IAccount } from "@/database/account.model";
 import { SignInWithOAuthParams } from "@/types/global";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:300/api";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
 
 export const api = {
     auth: {
