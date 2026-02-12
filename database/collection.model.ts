@@ -1,4 +1,4 @@
-import { model, models, Schema, Types, Document } from "mongoose";
+import { model, models, Schema, Types, HydratedDocument } from "mongoose";
 
 // This model is to let the user to store/bookmark question that they might find helful
 
@@ -7,7 +7,7 @@ export interface ICollection {
     question: Types.ObjectId;
 }
 
- export interface ICollectionDoc extends ICollection, Document {}
+ export type ICollectionDoc = HydratedDocument<ICollection>
 
 const CollectionSchema = new Schema<ICollection>({
     author: { type: Schema.Types.ObjectId, ref:"User", required: true },

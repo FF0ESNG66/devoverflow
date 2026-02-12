@@ -1,4 +1,4 @@
-import { model, models, Schema, Types, Document } from "mongoose";
+import { model, models, Schema, Types, HydratedDocument } from "mongoose";
 
 // Purpose of this model:
 // A user can be authentciated through the account, for each one of the providers on its own
@@ -15,7 +15,7 @@ export interface IAccount {
 };
 
 
-export interface IAccountDoc extends IAccount, Document {}
+export type IAccountDoc = HydratedDocument<IAccount>
 
 const AccountSchema = new Schema<IAccount>({
     user: { type: Schema.Types.ObjectId, ref: "User", required:true },

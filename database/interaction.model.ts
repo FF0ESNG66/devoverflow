@@ -1,4 +1,4 @@
-import { model, models, Schema, Types, Document } from "mongoose";
+import { model, models, Schema, Types, HydratedDocument } from "mongoose";
 
 // This model is to track and analyze the user behavior and interaction so we can build
 // a recommendation algorithms to provide personalized experience
@@ -11,7 +11,7 @@ export interface IInteraction {
 }
 
 
- export interface IInteractionDoc extends IInteraction, Document {}
+ export type IInteractionDoc = HydratedDocument<IInteraction>
 
 const InteractionSchema = new Schema<IInteraction>({
     user: { type: Schema.Types.ObjectId, ref:"User", required: true },

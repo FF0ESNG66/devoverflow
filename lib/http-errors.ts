@@ -26,7 +26,7 @@ export class ValidationError extends RequestError {
         this.errors = fieldErrors;
     }
 
-    // This method takes  a record of field errors as input and returns a formatted string
+    // This method takes a record of field errors as input and returns a formatted string
     static formatFieldErrors(errors: Record<string, string[]>): string {
         const formattedMessages = Object.entries(errors).map(
             ([field, messages]) => {

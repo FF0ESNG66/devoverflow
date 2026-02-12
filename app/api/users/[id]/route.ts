@@ -21,7 +21,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
             throw new NotFoundError("User");
         };
 
-        return NextResponse.json({ success: true, data: User }, { status: 200 })
+        return NextResponse.json({ success: true, data: user }, { status: 200 })
 
     } catch (error) {
         return handleError(error, "api") as APIErrorResponse;

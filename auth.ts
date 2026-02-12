@@ -4,13 +4,55 @@ import Google from "next-auth/providers/google"
 import { api } from "./lib/api";
 import { ActionResponse } from "./types/global";
 import { IAccountDoc } from "./database/account.model";
+import { SignInSchema } from "./lib/validations";
+import { IUserDoc } from "./database/user.model";
+import bcrypt from "bcryptjs";
+import Credentials from "next-auth/providers/credentials"
 
 // These callbacks will make sure that our users are authenticated
 // They will be called whenever a user signs in using any provider.
  
 // with the callbacks we can intercept and customize the auth flow
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [GitHub, Google],
+  providers: [
+    GitHub, 
+    Google, 
+
+    Credentials({
+      // The authorized() function is part of the "Credentials" provider in NextAuth
+      // It is specifically used for verfiying credentials during sign-in, validating an email-password pair
+      // and returning details if needed
+      async authorize(credentials) {
+        const validatedFields = SignInSchema.safeParse(credentials);
+
+        if(validatedFields.success) {
+          const { email, password } = validatedFields.data;
+
+          const { data: existingAccount } = (await api.accounts.getByProvider(email)) as ActionResponse<IAccountDoc>;
+
+          if(!existingAccount) return null; 
+
+          const { data: existingUser } = (await api.users.getById(existingAccount.user.toString())) as ActionResponse<IUserDoc>;
+
+          console.log(existingUser)
+
+          if(!existingUser) return null;
+
+          const isValidPassword = await bcrypt.compare(password, existingAccount.password!);
+
+          if(isValidPassword) {
+            return {
+              id: existingUser.id,
+              name: existingUser.name,
+              email: existingUser.email,
+              image: existingUser.image,
+            };
+          }
+        }
+        return null;
+      },
+    }),
+  ],
   callbacks: {
     async session({ session, token}) {
       session.user.id = token.sub as string;

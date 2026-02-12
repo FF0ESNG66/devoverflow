@@ -33,6 +33,13 @@ interface SignInWithOAuthParams {
     providerAccountId: string
 }
 
+interface AuthCredentials {
+    name: string;
+    username: string;
+    email: string;
+    password: string;
+}
+
 // With this we can know exactly how each one of our responses is goint to look like
 type ActionResponse<T = null> = {
     success: boolean;
