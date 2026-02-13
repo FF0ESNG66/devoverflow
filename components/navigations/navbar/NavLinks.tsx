@@ -8,11 +8,18 @@ import { cn } from "@/lib/utils";
 import { SheetClose } from "@/components/ui/sheet";
 
 
-const NavLinks = ( {isMobileNav = false}: { isMobileNav?: boolean } ) => {
+
+const NavLinks = ({
+    isMobileNav = false, 
+    userId
+}: { 
+    isMobileNav?: boolean; 
+    userId?: string 
+} ) => {
 
     const pathname = usePathname();  // we can use this to get the url of the current page and we can use this because it is a client component
 
-    const userId = 1;
+    
 
   return (
     <>
