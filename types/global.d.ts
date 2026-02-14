@@ -40,6 +40,13 @@ interface AuthCredentials {
     password: string;
 }
 
+interface CreateQuestionParams {
+    title: string;
+    content: string;
+    tags: string[];
+}
+
+
 // With this we can know exactly how each one of our responses is goint to look like
 type ActionResponse<T = null> = {
     success: boolean;

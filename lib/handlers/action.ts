@@ -8,9 +8,9 @@ import dbConnect from "../mongoose";
 
 
 type ActionOptions<T> = {
-    params?: T,
-    schema?: ZodType<T>,
-    authorize?: boolean,
+    params: T,
+    schema: ZodType<T>,
+    authorize: boolean,
 
 };
 
@@ -25,17 +25,15 @@ async function action<T>({
     authorize = false,
 }: ActionOptions<T>) {
     // 1
-    if(schema && params) {
-        try {
-            schema.parse(params);
-        } catch (error) {
-            if (error instanceof ZodError) {
-                const flattered = z.flattenError(error);
-                return new  ValidationError(flattered.fieldErrors);
-            } else {
-                return new Error("Schema validation failed");
-            }
-        };
+    try {
+        schema.parse(params);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            const flattered = z.flattenError(error);
+            return new  ValidationError(flattered.fieldErrors);
+        } else {
+            return new Error("Schema validation failed");
+        }
     };
 
     // 2
